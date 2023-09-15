@@ -42,7 +42,7 @@ Route::delete('/books/{id}', [BookController::class, 'destroy']);
 Route::put('/books/{id}', [BookController::class, 'update']);
 
 Route::middleware('auth:sanctum')->get('/books/{id}/stats', [BookController::class, 'stats']);
-Route::get('/books/top', [BookController::class, 'getTopFiveBooks']);
+Route::get('/books/top/{id}', [BookController::class, 'getTopBook']);
 
 //BookVersion
 Route::get('bookversion', [BookVersionController::class, 'index']);

@@ -115,8 +115,35 @@ class BookController extends Controller
         ]);
     }
 
-    public function getTopFiveBooks()
+    /**
+     * @return top rated book
+     */
+    public function getTopBook(string $id)
     {
-        return 'oui';
+        $book_avg_array = [];
+        $best_book = [
+            'book_id' => 0,
+            'avg' => 0
+        ];
+
+        $books = Book::query()
+            ->hasNote()
+            ->with(['comments' => fn($q) => $q->select('book_id', 'note')])
+            ->get();
+
+        foreach ($books as $key => $book) {
+            $avg = $book->comments->avg('note');
+            array_push($book_avg_array, ['book_id' => $book->id, 'avg' => $avg]);
+        }
+
+        foreach ($book_avg_array as $key => $book) {
+            if ($best_book['avg'] < $book['avg']) {
+                $best_book = $book;
+            }
+        }
+
+        return Book::with('comments')
+            ->where('id', $best_book['book_id'])
+            ->get();
     }
 }

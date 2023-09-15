@@ -28,4 +28,9 @@ class Book extends Model
     {
         return $this->hasMany(BookVersion::class);
     }
+
+    public function scopeHasNote($query)
+    {
+        return $query->whereHas('comments', fn($q) => $q->whereNotnull('note'));
+    }
 }
