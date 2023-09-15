@@ -46,3 +46,20 @@ test('remove user', function() {
     $response->assertOk();
     expect(User::all()->count())->toEqual(0);
 });
+
+test('update user', function() {
+    $user = User::factory()->create();
+    $id = $user->id;
+
+    $response = $this->put('api/users/' . $id, [
+        "name" => "test",
+        "email" => "a@a.a",
+        "email_verified_at" => "12121212",
+        "password" => "123456",
+        "remember_token" => "EDEFF34F-£424_D34FRS"
+    ]);
+
+    $response->assertOk();
+    expect($user->first()->name)->toEqual('test');
+    expect($user->first()->email)->toEqual('a@a.a');
+});
