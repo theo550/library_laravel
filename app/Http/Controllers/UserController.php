@@ -167,17 +167,15 @@ class UserController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(string $id)
     {
-        Auth::user()->tokens()->delete();
+        User::find($id)->tokens()->delete();
 
         return 'user logged out';
     }
 
     public function getCurrentUser()
     {
-        return response()->json([
-            'oui'
-        ]);
+        return Auth::user();
     }
 }
